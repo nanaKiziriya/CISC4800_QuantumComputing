@@ -17,6 +17,7 @@ absract class ComplexNumber{
 }
 
 class GenComplex extends ComplexNumber{
+    double real, imaginary;
     public String toString(){
 
     }
@@ -24,10 +25,9 @@ class GenComplex extends ComplexNumber{
     
 
 class PlrComplex extends ComplexNumber{
-    double
-    double
+    double radius, piRadians;
     public String toString(){
-
+        return String.format("%f,%fpi",radius,piRadians);
     }
 }
 
