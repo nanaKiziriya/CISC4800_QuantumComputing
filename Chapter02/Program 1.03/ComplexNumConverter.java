@@ -1,30 +1,53 @@
+import java.lang.Math;
+
 public class ComplexNumConverter{
     // convert between general (cartesian), polar, and exponential (Euler's formula) form for complex numbers
     public static void main(String[]args){
         //driver
-        System.out.println((Math.PI*2)/Math.PI);
     }
 }
 
-absract class ComplexNumber{}
+
+// ComplexNumber object classes
+abstract class ComplexNumber{}
 
 class GenComplex extends ComplexNumber{
-    double real, imaginary;
+    double real=0, imaginary=0;
+
+    GenComplex(){}
+    GenComplex(double real, double imaginary){
+        this.real = real;
+        this.imaginary = imaginary;
+    }
+    
     public String toString(){
-        
+        return String.format("%f+%fi",real,imaginary);
     }
 }
 
 class PlrComplex extends ComplexNumber{
-    double radius, piRadians;
+    double radius=0, piRadians=0;
+    
+    ExpComplex(){}
+    ExpComplex(double radius, double radians){
+        this.radius = radius;
+        piRadians = radians/PI;
+    }
+    
     public String toString(){
         return String.format("%f,%fpi",radius,piRadians);
     }
 }
 
 class ExpComplex extends PlrComplex{
-    // r*exp(theta*i)
+    ExpComplex(){
+        super();
+    }
+    ExpComplex(double radius, double radians){
+        super(radius, radians/PI);
+    }
+    
     public String toString(){
-        return String.format("",radius,piRadians);
+        return String.format("%fexp(%f)",radius,piRadians);
     }
 }
