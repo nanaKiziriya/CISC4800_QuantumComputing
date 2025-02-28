@@ -9,7 +9,12 @@ public class ComplexNumConverter{
 
 
 // ComplexNumber object classes
-abstract class ComplexNumber{}
+abstract class ComplexNumber implements Cloneable{
+    @Override
+    abstract ComplexNumber clone();
+    @Override
+    abstract String toString();
+}
 
 class GenComplex extends ComplexNumber{
     double real=0, imaginary=0;
@@ -19,7 +24,10 @@ class GenComplex extends ComplexNumber{
         this.real = real;
         this.imaginary = imaginary;
     }
-    
+
+    public GenComplex clone(){
+        return new GenComplex(real,imaginary);
+    }
     public String toString(){
         return String.format("%f+%fi",real,imaginary);
     }
