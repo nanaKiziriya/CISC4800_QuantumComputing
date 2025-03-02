@@ -46,7 +46,7 @@ abstract class ComplexNumber implements Cloneable{
     abstract public void add(ComplexNumber that);
     abstract public void subtract(ComplexNumber that);
     abstract public void multiply(ComplexNumber that);
-    abstract public void divide(ComplexNumber that){}
+    abstract public void divide(ComplexNumber that);
 
     public void multiplyScalar(double d){ setRadius(d*getRadius()); }
 
@@ -101,7 +101,6 @@ class GenComplex extends ComplexNumber{
         real = real*that.getReal() - imaginary*that.getImaginary();
         imaginary = real *that.getImaginary() + imaginary*that.getReal();
     }
-    @SafeVarargs
     public void divide(ComplexNumber that){
         if(ComplexMath.equalLinear(that.getRadius(),0)){
             System.err.printf("/ by zero error: attempted %s / %s",this.toString(),that.toString());
@@ -169,7 +168,6 @@ class PlrComplex extends ComplexNumber{
         radius *= that.getRadius();
         radians = ComplexMath.arc(radians+that.getRadians());
     }
-    @SafeVarargs
     public void divide(ComplexNumber that){
         if(ComplexMath.equalLinear(that.getRadius(),0)){
             System.err.printf("/ by zero error: attempted %s / %s",this.toString(),that.toString());
