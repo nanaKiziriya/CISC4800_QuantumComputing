@@ -30,6 +30,12 @@ public class ComplexMath{
 
 // ComplexNumber object classes
 abstract class ComplexNumber implements Cloneable{
+
+    public static void printCurrentStackTrace(){
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        System.out.println("Current stack trace:");
+        for(StackTraceElement e : stackTraceElements){ System.out.println(e.toString()); }
+    }
     
     public ComplexNumber clone() throws CloneNotSupportedException{ return (ComplexNumber)super.clone(); }
     public boolean equals(ComplexNumber that){
@@ -40,7 +46,7 @@ abstract class ComplexNumber implements Cloneable{
     abstract public void add(ComplexNumber that);
     abstract public void subtract(ComplexNumber that);
     abstract public void multiply(ComplexNumber that);
-    abstract public void divide(ComplexNumber that);
+    abstract public void divide(ComplexNumber that){}
 
     public void multiplyScalar(double d){ setRadius(d*getRadius()); }
 
@@ -49,12 +55,14 @@ abstract class ComplexNumber implements Cloneable{
     abstract public double getRadius();
     abstract public double getRadians();
     abstract public double getPiRadians();
+    public double getModulus(){ return getRadius(); }
 
     abstract public void setReal(double d);
     abstract public void setImaginary(double d);
     abstract public void setRadius(double d);
     abstract public void setRadians(double d);
     abstract public void setPiRadians(double d);
+    public void setModulus(double d){ setRadius(d); }
 
     abstract public ComplexNumber getConjugate();
     public double getConjugateProduct(){ return Math.pow(getRadius(),2); }
@@ -93,10 +101,18 @@ class GenComplex extends ComplexNumber{
         real = real*that.getReal() - imaginary*that.getImaginary();
         imaginary = real *that.getImaginary() + imaginary*that.getReal();
     }
-    public void divide(ComplexNumber that){ // multiply conjugate to numerator and denominator
-        multiply(that.getConjugate()); // multiplies numerator
-        multiplyScalar(1/that.getConjugateProduct()); // divide by (double)denominator, NOT recursive
+    @SafeVarargs
+    public void divide(ComplexNumber that){
+        if(ComplexMath.equalLinear(that.getRadius(),0)){
+            System.err.printf("/ by zero error: attempted %s / %s",this.toString(),that.toString());
+            printCurrentStackTrace();
+            System.exit(1);
+        } else{
+            multiply(that.getConjugate()); // multiplies numerator
+            multiplyScalar(1/that.getConjugateProduct()); // divide by (double)denominator, NOT recursive
+        }
     }
+
     
     public double getReal(){ return real; }
     public double getImaginary(){ return imaginary; }
@@ -153,11 +169,18 @@ class PlrComplex extends ComplexNumber{
         radius *= that.getRadius();
         radians = ComplexMath.arc(radians+that.getRadians());
     }
+    @SafeVarargs
     public void divide(ComplexNumber that){
-        radius /= that.getRadius();
-        radians = ComplexMath.arc(radians-that.getRadians());
+        if(ComplexMath.equalLinear(that.getRadius(),0)){
+            System.err.printf("/ by zero error: attempted %s / %s",this.toString(),that.toString());
+            printCurrentStackTrace();
+            System.exit(1);
+        } else{
+            radius /= that.getRadius();
+            radians = ComplexMath.arc(radians-that.getRadians());
+        }
     }
-
+    
     public double getRadius(){ return radius; }
     public double getRadians(){ return radians; }
     public double getPiRadians(){ return radians/Math.PI; }
