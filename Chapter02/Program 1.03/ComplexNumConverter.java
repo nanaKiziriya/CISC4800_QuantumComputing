@@ -155,7 +155,7 @@ class PlrComplex extends ComplexNumber{
     }
     public void divide(ComplexNumber that){
         radius /= that.getRadius();
-        radians = ComplexMath.arc(radians-that.getRadians())
+        radians = ComplexMath.arc(radians-that.getRadians());
     }
 
     public double getRadius(){ return radius; }
