@@ -24,6 +24,8 @@ public class ComplexMath{
     public static double piRadians(double real, double imaginary){ return radians(real,imaginary)/pi; }
     
     public static double arc(double d){ return d%(2*pi); }
+    public static double modSumDifference(ComplexNumber c, ComplexNumber d){
+        return c.getModulus() + d.getModulus() - (c.clone().add(d)).getModulus();
     
 }
 
