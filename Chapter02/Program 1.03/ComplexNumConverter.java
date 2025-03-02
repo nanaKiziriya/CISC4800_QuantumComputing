@@ -63,7 +63,9 @@ abstract class ComplexNumber implements Cloneable{
     abstract public void setRadians(double d);
     abstract public void setPiRadians(double d);
     public void setModulus(double d){ setRadius(d); }
+    public void normalize(){ setRadius(1); }
 
+    public ComplexNumber getNormalized(){ return new this.clone().normalize(); }
     abstract public ComplexNumber getConjugate();
     public double getConjugateProduct(){ return Math.pow(getRadius(),2); }
     
