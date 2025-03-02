@@ -17,8 +17,8 @@ public class ComplexMath{
     public static boolean equalRadian(double n, double m){ return arc(n-m)/tolerance==0; }
 
     // calculations
-    public static double real(double radius, double radians){ return radius*Math.cos(radians()); }
-    public static double imaginary(double radius, double radians){ return radius*Math.sin(radians()); }
+    public static double real(double radius, double radians){ return radius*Math.cos(radians); }
+    public static double imaginary(double radius, double radians){ return radius*Math.sin(radians); }
     public static double radius(double real, double imaginary){ return Math.sqrt(Math.pow(real,2)+Math.pow(imaginary,2)); }
     public static double radians(double real, double imaginary){ return Math.atan2(imaginary,real); }
     public static double piRadians(double real, double imaginary){ return radians(real,imaginary)/pi; }
@@ -34,7 +34,7 @@ abstract class ComplexNumber implements Cloneable{
     public ComplexNumber clone() throws CloneNotSupportedException{ return (ComplexNumber)super.clone(); }
     public boolean equals(ComplexNumber that){
         return (ComplexMath.equalLinear(getReal(),that.getReal()) && ComplexMath.equalLinear(getImaginary(),that.getImaginary()))
-            || (ComplexMath.equalLinear(getRadius(),that.getRadius()) && ComplexMath.equalAngle(getRadians(),that.getRadians());
+            || (ComplexMath.equalLinear(getRadius(),that.getRadius()) && ComplexMath.equalRadian(getRadians(),that.getRadians()));
     }
 
     abstract public void add(ComplexNumber that);
@@ -45,7 +45,7 @@ abstract class ComplexNumber implements Cloneable{
     public void multiplyScalar(double d){ setRadius(d*getRadius()); }
 
     abstract public double getReal();
-    abstract public double getImaginary()    
+    abstract public double getImaginary();    
     abstract public double getRadius();
     abstract public double getRadians();
     abstract public double getPiRadians();
@@ -81,21 +81,21 @@ class GenComplex extends ComplexNumber{
     }
     
     // methods
-    public add(ComplexNumber that){
+    public void add(ComplexNumber that){
         real += that.getReal();
         imaginary += that.getImaginary();
     }
-    public subtract(ComplexNumber that){
+    public void subtract(ComplexNumber that){
         real -= that.getReal();
         imaginary -= that.getImaginary();
     }
-    public multiply(ComplexNumber that){
+    public void multiply(ComplexNumber that){
         real = real*that.getReal() - imaginary*that.getImaginary();
         imaginary = real *that.getImaginary() + imaginary*that.getReal();
     }
-    public divide(ComplexNumber that){ // multiply conjugate to numerator and denominator
+    public void divide(ComplexNumber that){ // multiply conjugate to numerator and denominator
         multiply(that.getConjugate()); // multiplies numerator
-        divide(that.getConjugateProduct()); // divide by (double)denominator, NOT recursive
+        multiplyScalar(1/that.getConjugateProduct()); // divide by (double)denominator, NOT recursive
     }
     
     public double getReal(){ return real; }
@@ -117,9 +117,10 @@ class GenComplex extends ComplexNumber{
         imaginary = ComplexMath.imaginary(getRadius(),d);
     }
     public void setPiRadians(double d){ setRadians(d*Math.PI); }
-
-    public GenComplex getConjugate(){ return new GenComplex(real,-1*imaginary); }
     
+    @Override
+    public GenComplex getConjugate(){ return new GenComplex(real,-1*imaginary); }
+    @Override
     public String toString(){ return String.format("%f+%fi",real,imaginary); }
 }
 
@@ -160,8 +161,8 @@ class PlrComplex extends ComplexNumber{
     public double getRadius(){ return radius; }
     public double getRadians(){ return radians; }
     public double getPiRadians(){ return radians/Math.PI; }
-    public double getReal(){ return real(radius,radians); }
-    public double getImaginary(){ return imaginary(radius,radians); }
+    public double getReal(){ return ComplexMath.real(radius,radians); }
+    public double getImaginary(){ return ComplexMath.imaginary(radius,radians); }
 
     public void setRadius(double d){ radius = d; }
     public void setRadians(double d){ radians = d; }
@@ -177,7 +178,6 @@ class PlrComplex extends ComplexNumber{
     
     @Override
     public PlrComplex getConjugate(){ return new PlrComplex(radius,-1*radians); }
-
     @Override
     public String toString(){ return String.format("%f,%fpi",radius,getPiRadians()); }
 }
@@ -199,7 +199,6 @@ class ExpComplex extends PlrComplex{
     // methods
     @Override
     public ExpComplex getConjugate(){ return new ExpComplex(getRadius(),-1*getRadians()); }
-    
     @Override
     public String toString(){
         return String.format("%fexp(i*%f)",getRadius(),getPiRadians());
