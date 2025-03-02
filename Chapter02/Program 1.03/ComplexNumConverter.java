@@ -1,3 +1,4 @@
+/* DRIVER */
 public class ComplexNumConverter{
     // convert between general (cartesian), polar, and exponential (Euler's formula) form for complex numbers
     public static void main(String[]args){
@@ -5,7 +6,7 @@ public class ComplexNumConverter{
     }
 }
 
-//
+/* UTILS */
 public class ComplexMath{
     // tolerance
     final static int numToleranceDigits = 1; // pick how many least-significant-digit places can be diffrent to make up for floating point error
@@ -30,7 +31,7 @@ public class ComplexMath{
 }
 
 
-// ComplexNumber object classes
+/* ComplexNumber Object Classes */
 abstract class ComplexNumber implements Cloneable{
 
     public static void printCurrentStackTrace(){
@@ -229,3 +230,21 @@ class ExpComplex extends PlrComplex{
         return String.format("%fexp(i*%f)",getRadius(),getPiRadians());
     }
 }
+
+
+/* Matrix Object Classes */
+public class Matrix{
+    
+    public static Matrix zero(int m,int n){
+        double[][] id = new double[m][n];
+        java.util.Arrays.fill(id,0);
+    }
+    public static Matrix identity(int m,int n){
+        double[][] id = zero(m,n);
+        for(int i=0;i<Math.min(m,n);i++){ id[i][i]=1; }
+        return id;
+    }
+
+    private double[][] matrix;
+
+
