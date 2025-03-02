@@ -8,8 +8,18 @@ public class ComplexNumConverter{
 
 // ComplexNumber object classes
 abstract class ComplexNumber implements Cloneable{
-    abstract public ComplexNumber clone();
-    abstract public boolean equals();
+    public ComplexNumber clone(){ return super.clone(); }
+    public boolean equals(ComplexNumber that){
+        return (this.getReal()==that.getReal() && this.getImaginary==this.getImaginary())
+            || (this.getPiRadians()==that.getPiRadians() && this.getRadius()==that.getRadius());
+    }
+    
+    abstract public double getRadius();
+    abstract public double getRadians();
+    abstract public double getPiRadians();
+    abstract public double getReal();
+    abstract public double getImaginary();
+    
     abstract public ExpComplex toExpComplex();
     abstract public GenComplex toGenComplex();
     abstract public PlrComplex toPlrComplex();
@@ -25,18 +35,16 @@ class GenComplex extends ComplexNumber{
         this.real = real;
         this.imaginary = imaginary;
     }
+    GenComplex(ComplexNumber that){
+        return that.toGenComplex();
+    }
     // methods
-    public GenComplex clone(){
-        return new GenComplex(real,imaginary);
-    }
-    public boolean equals(ComplexNumber c){
-        return (real==c.getReal() && imaginary==c.getImaginary()) || ();
-    }
     public double getRadius(){ return Math.sqrt(Math.pow(real,2)+Math.pow(imaginary,2)); } //
     public double getRadians(){ return Math.atan2(imaginary,real); } //
     public double getPiRadians(){ return getRadians()/Math.PI; } //
     public double getReal(){ return real; } //
     public double getImaginary(){ return imaginary; } //
+    
     public ExpComplex toExpComplex(){ return new ExpComplex(getRadius(),getRadians()); } //
     public GenComplex toGenComplex(){ return clone(); } //
     public PlrComplex toPlrComplex(){ return new PlrComplex(getRadius(),getRadians()); } //
