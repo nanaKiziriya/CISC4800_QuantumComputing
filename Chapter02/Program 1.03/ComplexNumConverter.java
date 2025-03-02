@@ -8,18 +8,38 @@ public class ComplexNumConverter{
 
 // ComplexNumber object classes
 abstract class ComplexNumber implements Cloneable{
+    static tolerance = 1; // for .equals()
     
     public ComplexNumber clone() throws CloneNotSupportedException{ return (ComplexNumber)super.clone(); }
     public boolean equals(ComplexNumber that){
-        return (this.getReal()==that.getReal() && this.getImaginary()==this.getImaginary())
-            || (this.getPiRadians()==that.getPiRadians() && this.getRadius()==that.getRadius());
+        return ((this.getReal()-that.getReal())/Math.pow(10,tolerance) && (this.getImaginary()-this.getImaginary())/Math.pow(10,tolerance))
+            || ((this.getPiRadians()-that.getPiRadians())/Math.pow(10,tolerance) && (this.getRadius()-that.getRadius())/Math.pow(10,tolerance));
     }
+
+    abstract public void add(ComplexNumber that);
+    abstract public void subtract(ComplexNumber that);
+    abstract public void multiply(ComplexNumber that);
+    abstract public void divide(ComplexNumber that);
+
+    abstract public void add(double d);
+    abstract public void subtract(double d);
+    abstract public void multiply(double d);
+    abstract public void divide(double d);
     
     abstract public double getRadius();
     abstract public double getRadians();
     abstract public double getPiRadians();
     abstract public double getReal();
-    abstract public double getImaginary();
+    abstract public double getImaginary()
+
+    abstract public void setRadius(double d);
+    abstract public void setRadians(double d);
+    abstract public void setPiRadians(double d);
+    abstract public void setReal(double d);
+    abstract public void setImaginary(double d);
+
+    abstract public ComplexNumber getConjugate();
+    abstract public double getConjugateProduct(){ return Math.pow(radius,2); }
     
     public GenComplex toGenComplex(){ return new GenComplex(getReal(),getImaginary()); }
     public ExpComplex toExpComplex(){ return new ExpComplex(getRadius(),getRadians()); }
@@ -43,6 +63,23 @@ class GenComplex extends ComplexNumber{
     }
     
     // methods
+    public add(ComplexNumber that){
+        real = real + that.getReal();
+        imaginary = imaginary + that.getImaginary();
+    }
+    public subtract(ComplexNumber that){
+        real = real - that.getReal();
+        imaginary = imaginary - that.getImaginary();
+    }
+    public multiply(ComplexNumber that){
+        real = real*that.getReal() - imaginary*that.getImaginary();
+        imaginary = real*that.getImaginary() + imaginary*that.getReal();
+    }
+    public divide(ComplexNumber that){ // multiply conjugate to numerator and denominator
+        multiply(that.conjugate); // multiplies numerator
+        divide(that.multiplyConjugate()); // divide by denominator
+    }
+    
     public double getRadius(){ return Math.sqrt(Math.pow(real,2)+Math.pow(imaginary,2)); }
     public double getRadians(){ return Math.atan2(imaginary,real); }
     public double getPiRadians(){ return getRadians()/Math.PI; }
