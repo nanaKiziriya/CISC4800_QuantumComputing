@@ -8,14 +8,10 @@ public class ComplexNumConverter{
 
 // ComplexNumber object classes
 abstract class ComplexNumber implements Cloneable{
-
-    abstract ComplexNumber();
-    abstract ComplexNumber(double n, double m);
-    abstract ComplexNumber(ComplexNumber that);
     
-    public ComplexNumber clone(){ return super.clone(); }
+    public ComplexNumber clone() throws CloneNotSupportedException{ return (ComplexNumber)super.clone(); }
     public boolean equals(ComplexNumber that){
-        return (this.getReal()==that.getReal() && this.getImaginary==this.getImaginary())
+        return (this.getReal()==that.getReal() && this.getImaginary()==this.getImaginary())
             || (this.getPiRadians()==that.getPiRadians() && this.getRadius()==that.getRadius());
     }
     
@@ -43,7 +39,7 @@ class GenComplex extends ComplexNumber{
         this.imaginary = imaginary;
     }
     GenComplex(ComplexNumber that){
-        return that.toGenComplex();
+        this(that.getReal(),that.getImaginary());
     }
     
     // methods
@@ -66,14 +62,14 @@ class PlrComplex extends ComplexNumber{
         piRadians = radians/Math.PI;
     }
     PlrComplex(ComplexNumber that){
-        this = that.toPlrComplex();
+        this(that.getRadius(),that.getRadians());
     }
     // methods
     public double getRadius(){ return radius; }
     public double getRadians(){ return piRadians*Math.PI; }
     public double getPiRadians(){ return piRadians; }
     public double getReal(){ return radius*Math.cos(getRadians()); }
-    public double getImaginary(){ return imaginary; }
+    public double getImaginary(){ return radius*Math.sin(getRadians()); }
     
     public String toString(){ return String.format("%f,%fpi",radius,piRadians); }
 }
@@ -88,11 +84,11 @@ class ExpComplex extends PlrComplex{
         super(radius, radians);
     }
     ExpComplex(ComplexNumber that){
-        this = that.toExpComplex();
+        super(that);
     }
     // methods
     @Override
     public String toString(){
-        return String.format("%fexp(%f)",radius,piRadians);
+        return String.format("%fexp(%f)",getRadius(),getPiRadians());
     }
 }
