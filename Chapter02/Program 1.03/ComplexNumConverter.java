@@ -26,7 +26,7 @@ public class ComplexMath{
     public static double arc(double d){ return d%(2*pi); }
     public static double modSumDifference(ComplexNumber c, ComplexNumber d){
         return c.getModulus() + d.getModulus() - (c.clone().add(d)).getModulus();
-    
+    }
 }
 
 
@@ -67,7 +67,7 @@ abstract class ComplexNumber implements Cloneable{
     public void setModulus(double d){ setRadius(d); }
     public void normalize(){ setRadius(1); }
 
-    public ComplexNumber getNormalized(){ return new this.clone().normalize(); }
+    public ComplexNumber getNormalized(){ return new clone().normalize(); }
     abstract public ComplexNumber getConjugate();
     public double getConjugateProduct(){ return Math.pow(getRadius(),2); }
     
