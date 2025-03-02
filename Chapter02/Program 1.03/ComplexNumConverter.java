@@ -8,10 +8,15 @@ public class ComplexNumConverter{
 //
 public class ComplexMath{
 
-    public double real(double radius, double radians){ return radius*Math.cos(radians()); }
-    public double imaginary(double radius, double radians){ return radius*Math.sin(radians()); }
-    public double radius(double real, double imaginary){ return Math.sqrt(Math.pow(real,2)+Math.pow(imaginary,2)); }
-    public double radians(double real, double imaginary){ return Math.atan2(imaginary,real); }
+    final int toleranceOrder = 1; // pick how many least-significant-digit places can be diffrent to make up for floating point error
+    final double tolerance = Math.pow(10,toleranceOrder);
+    
+    public static boolean equal(double n, double m){ return (n-m)/tolerance==0; }
+
+    public static double real(double radius, double radians){ return radius*Math.cos(radians()); }
+    public static double imaginary(double radius, double radians){ return radius*Math.sin(radians()); }
+    public static double radius(double real, double imaginary){ return Math.sqrt(Math.pow(real,2)+Math.pow(imaginary,2)); }
+    public static double radians(double real, double imaginary){ return Math.atan2(imaginary,real); }
     
 }
 
@@ -22,8 +27,8 @@ abstract class ComplexNumber implements Cloneable{
     
     public ComplexNumber clone() throws CloneNotSupportedException{ return (ComplexNumber)super.clone(); }
     public boolean equals(ComplexNumber that){
-        return ((this.getReal()-that.getReal())/Math.pow(10,tolerance) && (this.getImaginary()-this.getImaginary())/Math.pow(10,tolerance))
-            || ((this.getPiRadians()-that.getPiRadians())/Math.pow(10,tolerance) && (this.getRadius()-that.getRadius())/Math.pow(10,tolerance));
+        return (ComplexMath.equal(getReal(),that.getReal()) && ComplexMath.equal(getImaginary(),that.getImaginary()))
+            || (ComplexMath.equal(getRadius(),that.getRadius()) && ComplexMath.equal(getRadians(),that.getRadians())
     }
 
     abstract public void add(ComplexNumber that);
