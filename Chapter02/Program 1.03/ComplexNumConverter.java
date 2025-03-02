@@ -132,7 +132,7 @@ class PlrComplex extends ComplexNumber{
     PlrComplex(){}
     PlrComplex(double radius, double radians){
         this.radius = radius;
-        this.radians = radians;
+        this.radians = ComplexMath.arc(radians);
     }
     PlrComplex(ComplexNumber that){
         this(that.getRadius(),that.getRadians());
@@ -151,11 +151,11 @@ class PlrComplex extends ComplexNumber{
     }
     public void multiply(ComplexNumber that){
         radius *= that.getRadius();
-        radians += that.getRadians();
+        radians = ComplexMath.arc(radians+that.getRadians());
     }
     public void divide(ComplexNumber that){
         radius /= that.getRadius();
-        radians -= that.getRadians();
+        radians = ComplexMath.arc(radians-that.getRadians())
     }
 
     public double getRadius(){ return radius; }
@@ -165,8 +165,8 @@ class PlrComplex extends ComplexNumber{
     public double getImaginary(){ return ComplexMath.imaginary(radius,radians); }
 
     public void setRadius(double d){ radius = d; }
-    public void setRadians(double d){ radians = d; }
-    public void setPiRadians(double d){ radians = d*Math.PI; }
+    public void setRadians(double d){ radians = ComplexMath.arc(d); }
+    public void setPiRadians(double d){ radians = ComplexMath.arc(d*Math.PI); }
     public void setReal(double d){
         radius = ComplexMath.radius(d,getImaginary());
         radians = ComplexMath.radians(d,getImaginary());
